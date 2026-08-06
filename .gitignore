@@ -1,0 +1,24 @@
+# Ignore environment file (sensitive credentials)
+.env
+
+# Ignore vendor folder
+vendor/
+
+# Ignore uploaded user images (except .gitkeep)
+uploads/*
+!uploads/.gitkeep
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore OS temp files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Ignore PHP error logs
+*.log
+error_log
