@@ -1,5 +1,5 @@
 <?php
-// load .env from project root
+// load .env from project root if present
 $envFile = dirname(__DIR__) . '/.env';
 
 if (file_exists($envFile)) {
@@ -15,14 +15,24 @@ if (file_exists($envFile)) {
     }
 }
 
-// fallback defaults
+// fallback database defaults
 defined('DB_HOST') || define('DB_HOST', 'localhost');
 defined('DB_USER') || define('DB_USER', 'root');
 defined('DB_PASS') || define('DB_PASS', '');
 defined('DB_NAME') || define('DB_NAME', 'blog_db');
 
-// base URL
-define('BASE_URL', '/blog-app');
-
-// project root path
+// project root directory on server
 define('ROOT_PATH', dirname(__DIR__));
+
+// auto-detect BASE_URL if not explicitly set in .env
+if (!defined('BASE_URL')) {
+    $docRoot = rtrim(str_replace('\\', '/', realpath($_SERVER['DOCUMENT_ROOT'] ?? '') ?: ($_SERVER['DOCUMENT_ROOT'] ?? '')), '/');
+    $appRoot = rtrim(str_replace('\\', '/', realpath(ROOT_PATH) ?: ROOT_PATH), '/');
+
+    $basePath = '';
+    if (!empty($docRoot) && !empty($appRoot) && strpos($appRoot, $docRoot) === 0) {
+        $basePath = substr($appRoot, strlen($docRoot));
+    }
+    $basePath = rtrim(str_replace('\\', '/', $basePath), '/');
+    define('BASE_URL', $basePath);
+}
